@@ -11,15 +11,32 @@ url_list = [base_url + "?promo=offer" + str(n) for n in range(0, 10)]
 url_list_with_xfail = [pytest.param(url, marks=pytest.mark.xfail) if url[-1] == "7" else url for url in url_list]
 
 
-@pytest.mark.parametrize('url', url_list_with_xfail)
-def test_guest_can_add_product_to_basket(browser, url):
-    page = ProductPage(browser, url)
-    page.open()
-    page.should_be_add_to_cart_cta()
-    page.add_to_cart_click()
-    page.solve_quiz_and_get_code()
-    page.product_name_should_be_in_message()
-    page.correct_price_should_be_in_message()
+@pytest.mark.add_to_cart_user
+class TestUserAddToBasketFromProductPage:
+    @pytest.fixture(scope="function", autouse=True)
+    def setup(self, browser):
+        loginUrl = "http://selenium1py.pythonanywhere.com/accounts/login/"
+        loginPage = LoginPage(browser, loginUrl)
+        loginPage.open()
+        email = str(time.time()) + "@fakemail.org"
+        loginPage.register_new_user(email, "testpassword")
+        loginPage.should_be_authorized_user()
+
+    def test_user_cant_see_success_message(self, browser):
+        url = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+        page = ProductPage(browser, url)
+        page.open()
+        page.add_to_cart_message_is_not_presented()
+
+    @pytest.mark.parametrize('url', url_list_with_xfail)
+    def test_user_can_add_product_to_basket(self, browser, url):
+        page = ProductPage(browser, url)
+        page.open()
+        page.should_be_add_to_cart_cta()
+        page.add_to_cart_click()
+        page.solve_quiz_and_get_code()
+        page.product_name_should_be_in_message()
+        page.correct_price_should_be_in_message()
 
 
 @pytest.mark.xfail
@@ -30,13 +47,6 @@ def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
     page.should_be_add_to_cart_cta()
     page.add_to_cart_click()
     page.solve_quiz_and_get_code()
-    page.add_to_cart_message_is_not_presented()
-
-
-def test_guest_cant_see_success_message(browser):
-    url = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
-    page = ProductPage(browser, url)
-    page.open()
     page.add_to_cart_message_is_not_presented()
 
 

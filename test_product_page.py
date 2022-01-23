@@ -18,3 +18,34 @@ def test_guest_can_add_product_to_basket(browser, url):
     page.solve_quiz_and_get_code()
     page.product_name_should_be_in_message()
     page.correct_price_should_be_in_message()
+
+
+@pytest.mark.xfail
+def test_guest_cant_see_success_message_after_adding_product_to_basket(browser):
+    url = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+    page = ProductPage(browser, url)
+    page.open()
+    page.should_be_add_to_cart_cta()
+    page.add_to_cart_click()
+    page.solve_quiz_and_get_code()
+    page.add_to_cart_message_is_not_presented()
+
+
+def test_guest_cant_see_success_message(browser):
+    url = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+    page = ProductPage(browser, url)
+    page.open()
+    page.add_to_cart_message_is_not_presented()
+
+
+@pytest.mark.xfail
+def test_message_disappeared_after_adding_product_to_basket(browser):
+    url = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
+    page = ProductPage(browser, url)
+    page.open()
+    page.should_be_add_to_cart_cta()
+    page.add_to_cart_click()
+    page.solve_quiz_and_get_code()
+    time.sleep(1)
+    page.add_to_cart_message_is_disappeared()
+

@@ -22,3 +22,12 @@ class ProductPage(BasePage):
         cartPrice = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE_IN_MESSAGE).text
         assert productPrice == cartPrice, f"Product name isn't in Add To Cart message. Should be " \
                                                   f"'{productPrice}', but '{cartPrice}' "
+
+    def add_to_cart_message_is_not_presented(self):
+        assert self.is_not_element_present(*ProductPageLocators.PRODUCT_IN_CART_MESSAGE), "Add to cart message is " \
+                                                                                         "presented on page, " \
+                                                                                         "but shouldn't "
+
+    def add_to_cart_message_is_disappeared(self):
+        assert self.is_disappeared(*ProductPageLocators.PRODUCT_IN_CART_MESSAGE), "Add to cart message isn't " \
+                                                                                  "disappeared "

@@ -14,11 +14,11 @@ class ProductPage(BasePage):
     def product_name_should_be_in_message(self):
         productName = self.browser.find_element(*ProductPageLocators.PRODUCT_NAME).text
         productNameInAlert = self.browser.find_element(*ProductPageLocators.PRODUCT_IN_CART_MESSAGE).text
-        assert productName in productNameInAlert, f"Product name isn't in Add To Cart message. Should be " \
+        assert productName == productNameInAlert, f"Product name isn't in Add To Cart message. Should be " \
                                                   f"'{productName}', but '{productNameInAlert}' "
 
     def correct_price_should_be_in_message(self):
         productPrice = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE).text
         cartPrice = self.browser.find_element(*ProductPageLocators.PRODUCT_PRICE_IN_MESSAGE).text
-        assert productPrice in cartPrice, f"Product name isn't in Add To Cart message. Should be " \
+        assert productPrice == cartPrice, f"Product name isn't in Add To Cart message. Should be " \
                                                   f"'{productPrice}', but '{cartPrice}' "

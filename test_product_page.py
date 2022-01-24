@@ -26,12 +26,9 @@ class TestUserAddToBasketFromProductPage:
         page.open()
         page.add_to_cart_message_is_not_presented()
 
-    url_list = [base_url + "?promo=offer" + str(n) for n in range(0, 10)]
-    url_list_with_xfail = [pytest.param(url, marks=pytest.mark.xfail) if url[-1] == "7" else url for url in url_list]
-
     @pytest.mark.need_review
-    @pytest.mark.parametrize('url', url_list_with_xfail)
-    def test_user_can_add_product_to_basket(self, browser, url):
+    def test_user_can_add_product_to_basket(self, browser):
+        url = "http://selenium1py.pythonanywhere.com/catalogue/the-shellcoders-handbook_209/?promo=newYear"
         page = ProductPage(browser, url)
         page.open()
         page.should_be_add_to_cart_cta()
